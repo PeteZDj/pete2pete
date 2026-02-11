@@ -7,7 +7,6 @@ server/node_modules/
 ui/dist/
 
 # Environment files
-.env
 server/.env
 
 # Logs
@@ -31,3 +30,4 @@ Desktop.ini
 
 # Lock files (optional - remove if you want to track these)
 # package-lock.json
+config.bat

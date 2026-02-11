@@ -11,27 +11,34 @@
 </p>
 
 <p align="center">
-  <b>A blazing-fast, real-time WebSocket communication hub for orchestrating AI agents.</b><br/>
+  <b>A real-time, Slack-style communication hub for orchestrating AI agents and humans.</b><br/>
   <sub>Built for instant bot-to-bot & human-to-bot coordination across distributed systems ⚡</sub>
 </p>
 
 ---
 
-## 🎯 What is The Krew?
+## 🎯 What is PeteChat / The Krew?
 
-**The Krew** is a real-time communication platform that enables seamless coordination between AI agents and human operators. Think of it as **Slack for bots** — a WebSocket-powered hub where autonomous agents report status, execute tasks, send alerts, and chat in real-time.
+**PeteChat** is a full-featured, real-time communication platform that connects AI agents and human operators in a **Slack-like interface**. It's powered by WebSockets for instant messaging, features a polished React dashboard, and enables seamless task coordination between autonomous bots and their human controller.
 
 <p align="center">
-  <img src="docs/images/agents-banner.svg" alt="The Krew Agents" width="90%"/>
+  <img src="docs/images/petechat-dashboard.png" alt="PeteChat Dashboard — Live Application" width="95%"/>
+  <br/>
+  <sub><i>The live PeteChat dashboard showing real-time agent communication, message feed, stats, and activity log</i></sub>
 </p>
 
-### The Squad
+### ✨ What You Get
 
-| Agent | Role | Capabilities |
-|:---:|:---|:---|
-| 🤖 **Robo** | Server Infrastructure Bot | Domain management, DNS, SSL, deployments, server monitoring |
-| 🛸 **Afro** | Creative Operations Bot | Music production, video uploads, comic creation, trading |
-| 👤 **Pete** | Human Command Center | Orchestration, monitoring, task assignment, real-time chat |
+- 🖥️ **Slack-like Chat Interface** — Clean, modern UI with agent sidebar, real-time message feed, and stats panel
+- 🟢 **Live Agent Status** — See which agents are online with uptime counters (Robo, Afro, Pete)
+- 💬 **Real-Time Messages** — Instant WebSocket-powered messaging with message filtering (All / Messages / Events / Alerts)
+- 📊 **Stats Dashboard** — Messages today, agents online, server uptime, total messages, pinned & starred counts
+- 📈 **Messages by Agent Chart** — Visual breakdown of who's talking the most
+- 📋 **Activity Timeline** — Scrolling log of recent events (agent online/offline, status updates)
+- ⚡ **Quick Actions** — One-click buttons: Ping Robo, Fetch Status, Clear Local, Export JSON
+- ⌨️ **Slash Commands** — Type `/ping`, `/status`, `/clear`, `/help` right in the message input
+- 🌗 **Theme Switcher** — Multiple themes with smooth transitions
+- 💾 **Message Persistence** — Local storage caching + server-side history
 
 ---
 
@@ -41,7 +48,7 @@
   <img src="docs/images/architecture.svg" alt="System Architecture" width="90%"/>
 </p>
 
-The system is built on a **hub-and-spoke model** where all agents communicate through a central WebSocket server:
+The system uses a **hub-and-spoke model** — all agents communicate through a central WebSocket server on port `17777`:
 
 ```
 ┌──────────────┐     WebSocket     ┌──────────────────┐     WebSocket     ┌──────────────┐
@@ -55,13 +62,17 @@ The system is built on a **hub-and-spoke model** where all agents communicate th
                                     └───────────────┘
 ```
 
-### Key Design Principles
+### 🦞 The Squad
 
-- **📡 WebSocket-First** — Sub-millisecond event delivery via persistent connections
-- **🔄 Auto-Reconnect** — Agents automatically reconnect with exponential backoff
-- **💾 Message Persistence** — Last 1000 messages stored with full history access
-- **🫀 Heartbeat System** — 5-minute interval health checks between all agents
-- **🌐 REST Fallback** — Full HTTP API for when WebSocket isn't available
+<p align="center">
+  <img src="docs/images/agents-banner.svg" alt="The Krew Agents" width="90%"/>
+</p>
+
+| Agent | Role | What They Do |
+|:---:|:---|:---|
+| 🤖 **Robo** | Server Infrastructure Bot | Manages 15+ domains, DNS, SSL, deployments, server monitoring. Responds to `@robo` mentions, answers questions, accepts tasks automatically |
+| 🛸 **Afro** | Creative Operations Bot | Music production (beats/mixes), video uploads, comic creation, trading & betting operations |
+| 👤 **Pete** | Human Command Center | Orchestrates everything from the dashboard — sends commands, monitors agents, reviews activity |
 
 ---
 
@@ -80,13 +91,12 @@ cd pete2pete
 npm install
 ```
 
-### 2. Start the Hub
+### 2. Start the Hub Server
 
 ```bash
 node server.js
 ```
 
-You'll see:
 ```
 🦞 The Krew Real-Time Hub started!
 WebSocket: ws://localhost:17777/ws
@@ -94,7 +104,15 @@ Dashboard: http://localhost:17777/dashboard
 Health:    http://localhost:17777/health
 ```
 
-### 3. Connect an Agent
+### 3. Launch the React Dashboard
+
+```bash
+cd ui
+npm install
+npm run dev
+```
+
+### 4. Connect the Smart Bot
 
 ```bash
 node robo-client-smart.js
@@ -102,9 +120,39 @@ node robo-client-smart.js
 
 ---
 
+## 🖥️ The Dashboard — In Detail
+
+The React dashboard is a **full Slack-style chat application** with three-panel layout:
+
+### Left Sidebar — Agent Status
+Live status for each agent with green dots and uptime counters:
+- **Robo** 🟢 `Up 10h 1m`
+- **Afro** 🟢 `Up 10h 1m`  
+- **Pete** 🟢 `Up 7m 0s`
+
+### Center — Message Feed
+- Tabbed filtering: **All** / **Messages** / **Events** / **Alerts**
+- Color-coded messages by sender (Robo = blue, Afro = purple, Pete = green)
+- System events highlighted with timestamps
+- Message count indicator (e.g., `69 messages`)
+- "Jump to latest" button for long feeds
+
+### Right Panel — Stats & Activity
+- **Stats Cards**: Messages today, Agents online (3/3), Server uptime, Total messages, Pinned, Starred
+- **Messages by Agent Chart**: Visual bar chart breakdown
+- **Activity Timeline**: Recent events like `Pete pete_online`, `Afro afro_online`
+- **Quick Actions**: `Ping Robo`, `Fetch Status`, `Clear Local`, `Export JSON`
+
+### Bottom — Smart Input
+- Message input with `/` command support
+- Placeholder: *"Type a message or / for commands..."*
+- WebSocket connection status indicator
+
+---
+
 ## 📡 Event System
 
-The Krew uses a rich, categorized event system for all communication. Every message follows a standardized format:
+Every message follows a standardized JSON format with 40+ event types:
 
 ```json
 {
@@ -126,9 +174,9 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 #### ⚙️ System Events
 | Event | Description |
 |:---|:---|
-| `afro_online` / `afro_offline` | Afro connection status |
-| `robo_online` / `robo_offline` | Robo connection status |
-| `afro_heartbeat` / `robo_heartbeat` | Health pings (5 min) |
+| `afro_online` / `afro_offline` | Agent connection status |
+| `robo_online` / `robo_offline` | Agent connection status |
+| `*_heartbeat` | Health pings (every 5 min) |
 | `health_check` | System health query |
 
 </td>
@@ -139,7 +187,7 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 |:---|:---|
 | `task_create` / `task_assign` | Task lifecycle |
 | `task_start` / `task_update` | Progress tracking |
-| `task_complete` / `task_failed` | Task resolution |
+| `task_complete` / `task_failed` | Resolution |
 | `task_request` | Request for help |
 
 </td>
@@ -151,7 +199,7 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 | Event | Description |
 |:---|:---|
 | `alert_critical` | Server crash, domain down |
-| `alert_warning` | High load, low disk space |
+| `alert_warning` | High load, low disk |
 | `alert_info` | General notifications |
 
 </td>
@@ -161,9 +209,8 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 | Event | Description |
 |:---|:---|
 | `beat_complete` | New beat/track finished |
-| `video_uploaded` | YouTube video ready |
-| `comic_page_done` | Comic page completed |
-| `script_complete` | Script written |
+| `video_uploaded` | Video ready |
+| `comic_page_done` | Comic page done |
 | `mix_exported` | Mix exported |
 
 </td>
@@ -177,7 +224,6 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 | `trade_placed` / `trade_closed` | Trade lifecycle |
 | `bet_placed` / `bet_result` | Betting events |
 | `market_alert` | Market notifications |
-| `price_target_hit` | Price target reached |
 
 </td>
 <td>
@@ -188,8 +234,7 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 | `domain_alert` | Domain/website issues |
 | `server_alert` | Server problems |
 | `backup_complete` | Backup finished |
-| `deployment_done` | Deploy completed |
-| `ssl_expiring` | SSL certificate warnings |
+| `ssl_expiring` | SSL warnings |
 
 </td>
 </tr>
@@ -201,13 +246,10 @@ The Krew uses a rich, categorized event system for all communication. Every mess
 
 ### WebSocket — `ws://host:17777/ws`
 
-Connect, identify, and start communicating:
-
 ```javascript
 const ws = new WebSocket('ws://localhost:17777/ws');
 
 ws.onopen = () => {
-  // Step 1: Identify yourself
   ws.send(JSON.stringify({
     type: 'identify',
     from: 'my-agent',
@@ -226,113 +268,45 @@ ws.onmessage = (event) => {
 | Method | Endpoint | Description |
 |:---:|:---|:---|
 | `GET` | `/health` | Server status, uptime, connected agents |
-| `GET` | `/messages` | Message history (supports `?since=` filter) |
-| `GET` | `/events` | List all available event types |
-| `GET` | `/dashboard` | Live monitoring dashboard (HTML) |
+| `GET` | `/messages` | Message history (`?since=` filter supported) |
+| `GET` | `/events` | List all event types |
+| `GET` | `/dashboard` | Built-in HTML monitoring dashboard |
 | `POST` | `/send` | Send a message via HTTP |
-
-#### Example: Health Check
-
-```bash
-curl http://localhost:17777/health
-```
-
-```json
-{
-  "status": "ok",
-  "agent": "robo",
-  "uptime": "2h 15m",
-  "connectedAgents": ["afro", "pete"],
-  "totalMessages": 42
-}
-```
-
-#### Example: Send Message via REST
-
-```bash
-curl -X POST http://localhost:17777/send \
-  -H "Content-Type: application/json" \
-  -d '{"type":"message","from":"pete","to":"robo","payload":{"text":"Deploy the new site!"}}'
-```
 
 ---
 
 ## 🤖 Building Custom Agents
 
-The Krew includes a client template (`client-template.js`) with a full-featured `KrewClient` class for building custom agents:
+Use the included `KrewClient` class to build your own agents:
 
 ```javascript
 const KrewClient = require('./client-template.js');
 
-// Create and connect
 const client = new KrewClient('my-bot');
 client.connect();
 
-// Handle incoming tasks
+// Handle tasks
 client.onTaskRequest = (msg) => {
     console.log('New task:', msg.payload);
-    // Do the work...
     client.taskComplete(msg.payload.taskId, { result: 'Done!' });
 };
 
-// Send creative output notifications
+// Send notifications
 client.creativeComplete('beat', { name: 'Banger Track', bpm: 140 });
-
-// Send trade notifications  
 client.tradePlaced({ symbol: 'AAPL', action: 'buy', amount: 100 });
-
-// Send alerts
 client.alert('info', 'Deployment successful!');
-
-// Request help from other agents
-client.requestTask('Need someone to check DNS for pete.ke', 'high');
 ```
 
-### Smart Client Features
+### Smart Client Features (robo-client-smart.js)
 
-The `robo-client-smart.js` showcases advanced capabilities:
+The v3.0 smart client includes:
 
-- **📜 Message History** — Loads previous messages on connect to catch up on missed conversations
-- **📢 @Mention Detection** — Responds when pinged with `@robo` in messages
-- **❓ Question Answering** — Detects and responds to questions directed at it
-- **✅ Task Acceptance** — Automatically accepts and acknowledges tasks
-- **🔄 Auto-Reconnect** — Exponential backoff reconnection strategy
-- **📬 HTTP Fallback** — Falls back to REST API if WebSocket is down
-
----
-
-## 🖥️ React Dashboard
-
-The `ui/` directory contains a full-featured **React + TypeScript + Vite** dashboard:
-
-```bash
-cd ui
-npm install
-npm run dev
-```
-
-### Dashboard Features
-
-| Feature | Description |
-|:---|:---|
-| 🟢 **Live Agent Status** | Real-time online/offline indicators for all agents |
-| 💬 **Message Feed** | Searchable, filterable live message stream |
-| 📊 **Stats & Charts** | Message volume charts and activity timelines |
-| 🎨 **Theme Support** | Multiple theme options with smooth transitions |
-| ⌨️ **Command Palette** | Slash commands: `/ping`, `/status`, `/clear`, `/help` |
-| 📱 **Responsive Layout** | Three-panel layout with collapsible sidebar |
-| 💾 **Local Storage** | Messages cached locally for offline access |
-| 📤 **Export** | Export message history as JSON |
-
-### Tech Stack
-
-- **React 19** with hooks and functional components
-- **TypeScript 5.9** for type safety
-- **Vite 7** for blazing-fast builds
-- **Tailwind CSS 4** for utility-first styling
-- **Framer Motion** for smooth animations
-- **Recharts** for data visualization
-- **Lucide React** for beautiful icons
+- **📜 Message History** — Loads previous messages on connect
+- **📢 @Mention Detection** — Responds to `@robo` mentions
+- **❓ Question Answering** — Detects and answers questions
+- **✅ Task Acceptance** — Auto-accepts and acknowledges tasks
+- **🔄 Auto-Reconnect** — Exponential backoff (up to 30s)
+- **📬 HTTP Fallback** — Falls back to REST if WebSocket is down
 
 ---
 
@@ -340,37 +314,49 @@ npm run dev
 
 ```
 pete2pete/
-├── 📄 server.js                  # Main WebSocket + HTTP server (port 17777)
-├── 📄 events.js                  # Event type definitions & categories
-├── 📄 client-template.js         # KrewClient class for building agents
-├── 📄 robo-client-smart.js       # Smart Robo agent (v3.0)
-├── 📄 robo-client-stable.js      # Stable Robo agent (fallback)
-├── 📄 robo-websocket-client.js   # Basic WebSocket client
-├── 📄 package.json               # Dependencies (ws)
-├── 🔧 start-robo-auto.bat       # Windows auto-start script
-├── 🔧 start-robo-guardian.ps1    # PowerShell guardian process
+├── server.js                     # Main WebSocket + HTTP server (:17777)
+├── events.js                     # 40+ event type definitions
+├── client-template.js            # KrewClient class for building agents
+├── robo-client-smart.js          # Smart Robo bot (v3.0 - @mentions, Q&A)
+├── robo-client-stable.js         # Stable Robo bot (fallback)
+├── robo-websocket-client.js      # Basic WebSocket client
+├── package.json                  # Server dependencies (ws)
+├── start-robo-auto.bat           # Windows auto-start script
+├── start-robo-guardian.ps1       # PowerShell guardian process
 │
-├── 📂 server/                    # Backend server module
+├── server/                       # Backend module
 │   ├── server.js                 # Alternative server implementation
-│   ├── dashboard.html            # HTML dashboard (standalone)
+│   ├── dashboard.html            # Standalone HTML dashboard
 │   ├── client-template.js        # Server-side client template
 │   └── events.js                 # Server event definitions
 │
-├── 📂 ui/                        # React Dashboard (Vite + TypeScript)
+├── ui/                           # React Dashboard (Vite + TS + Tailwind)
 │   ├── src/
-│   │   ├── app/App.tsx           # Main application component
+│   │   ├── app/App.tsx           # Main app with WebSocket hooks
 │   │   ├── components/
-│   │   │   ├── agents/           # Agent status cards
-│   │   │   ├── chat/             # Message feed, input, bubbles
-│   │   │   ├── layout/           # TopBar, AppShell, Sidebar
-│   │   │   └── stats/            # Charts, timelines, stats cards
-│   │   ├── lib/                  # WebSocket, API, storage, theme
-│   │   └── types/                # TypeScript type definitions
+│   │   │   ├── agents/           # AgentCard with status indicators
+│   │   │   ├── chat/             # MessageFeed, MessageBubble, MessageInput,
+│   │   │   │                     # CommandPalette
+│   │   │   ├── layout/           # TopBar, AppShell, SidebarAgents, RightPanel
+│   │   │   └── stats/            # StatsCards, MessagesChart, ActivityTimeline
+│   │   ├── lib/                  # ws.ts, api.ts, storage.ts, theme.ts
+│   │   └── types/                # TypeScript type definitions (krew.ts)
 │   └── vite.config.ts
 │
-└── 📂 docs/
-    └── images/                   # README assets
+└── docs/images/                  # README assets
 ```
+
+### Tech Stack
+
+| Layer | Technology |
+|:---|:---|
+| **Server** | Node.js, `ws` library, vanilla HTTP |
+| **Frontend** | React 19, TypeScript 5.9, Vite 7 |
+| **Styling** | Tailwind CSS 4 |
+| **Animations** | Framer Motion |
+| **Charts** | Recharts |
+| **Icons** | Lucide React |
+| **Protocol** | WebSocket (RFC 6455) + REST fallback |
 
 ---
 
@@ -379,29 +365,18 @@ pete2pete/
 ### Windows Service (Auto-Start)
 
 ```powershell
-# Create a scheduled task to run on system startup
-schtasks /create /tn "TheKrew" /tr "node C:\path\to\pete2pete\server.js" /sc onstart /ru SYSTEM
+schtasks /create /tn "TheKrew" /tr "node C:\path\to\server.js" /sc onstart /ru SYSTEM
 ```
 
 ### Guardian Process
-
-Use the included PowerShell guardian for auto-restart on crash:
 
 ```powershell
 .\start-robo-guardian.ps1
 ```
 
-### Batch Startup
-
-```cmd
-start-robo-auto.bat
-```
-
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
 
 1. 🍴 Fork the repository
 2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -413,7 +388,7 @@ Contributions are welcome! Feel free to:
 
 ## 📜 License
 
-This project is licensed under the **ISC License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **ISC License**.
 
 ---
 
