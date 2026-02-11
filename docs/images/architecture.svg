@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="100%" style="stop-color:#0f1128"/>
+    </linearGradient>
+    <filter id="g1">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00f5ff"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00ff00"/>
+    </marker>
+    <marker id="arrow-magenta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff00ff"/>
+    </marker>
+  </defs>
+  
+  <rect width="900" height="500" fill="url(#bg3)" rx="12"/>
+  
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="18" fill="#666" letter-spacing="4">SYSTEM ARCHITECTURE</text>
+  
+  <!-- Central Hub -->
+  <circle cx="450" cy="250" r="80" fill="#1a1a2e" stroke="#00f5ff" stroke-width="2"/>
+  <circle cx="450" cy="250" r="60" fill="#0f1128" stroke="#00f5ff" stroke-width="1" opacity="0.5"/>
+  <text x="450" y="235" text-anchor="middle" font-size="24">⚡</text>
+  <text x="450" y="258" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#00f5ff">WebSocket Hub</text>
+  <text x="450" y="278" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" fill="#666">:17777/ws</text>
+  
+  <!-- Robo Node (Left) -->
+  <rect x="30" y="200" width="180" height="100" rx="10" fill="#1a1a2e" stroke="#00f5ff" stroke-width="1.5"/>
+  <text x="120" y="240" text-anchor="middle" font-size="24">🤖</text>
+  <text x="120" y="265" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#00f5ff">Robo</text>
+  <text x="120" y="285" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">Server Bot</text>
+  
+  <!-- Afro Node (Right) -->
+  <rect x="690" y="200" width="180" height="100" rx="10" fill="#1a1a2e" stroke="#00ff00" stroke-width="1.5"/>
+  <text x="780" y="240" text-anchor="middle" font-size="24">🛸</text>
+  <text x="780" y="265" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#00ff00">Afro</text>
+  <text x="780" y="285" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">Creative Bot</text>
+  
+  <!-- Pete Node (Top) -->
+  <rect x="360" y="60" width="180" height="100" rx="10" fill="#1a1a2e" stroke="#ff00ff" stroke-width="1.5"/>
+  <text x="450" y="100" text-anchor="middle" font-size="24">👤</text>
+  <text x="450" y="125" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#ff00ff">Pete</text>
+  <text x="450" y="145" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">Human Controller</text>
+  
+  <!-- Connection: Robo → Hub -->
+  <line x1="210" y1="250" x2="370" y2="250" stroke="#00f5ff" stroke-width="1.5" marker-end="url(#arrow-cyan)" opacity="0.7"/>
+  <line x1="370" y1="255" x2="210" y2="255" stroke="#00f5ff" stroke-width="1.5" marker-end="url(#arrow-cyan)" opacity="0.4" stroke-dasharray="4,4"/>
+  
+  <!-- Connection: Hub → Afro -->
+  <line x1="530" y1="250" x2="690" y2="250" stroke="#00ff00" stroke-width="1.5" marker-end="url(#arrow-green)" opacity="0.7"/>
+  <line x1="690" y1="255" x2="530" y2="255" stroke="#00ff00" stroke-width="1.5" marker-end="url(#arrow-green)" opacity="0.4" stroke-dasharray="4,4"/>
+  
+  <!-- Connection: Pete → Hub -->
+  <line x1="450" y1="160" x2="450" y2="170" stroke="#ff00ff" stroke-width="1.5" marker-end="url(#arrow-magenta)" opacity="0.7"/>
+  <line x1="445" y1="170" x2="445" y2="160" stroke="#ff00ff" stroke-width="1.5" marker-end="url(#arrow-magenta)" opacity="0.4" stroke-dasharray="4,4"/>
+  
+  <!-- Event labels -->
+  <rect x="235" y="218" width="110" height="20" rx="4" fill="#1a1a2e" stroke="#333" stroke-width="0.5"/>
+  <text x="290" y="232" text-anchor="middle" font-family="'Courier New', monospace" font-size="8" fill="#00f5ff">tasks • alerts</text>
+  
+  <rect x="555" y="218" width="110" height="20" rx="4" fill="#1a1a2e" stroke="#333" stroke-width="0.5"/>
+  <text x="610" y="232" text-anchor="middle" font-family="'Courier New', monospace" font-size="8" fill="#00ff00">beats • trades</text>
+  
+  <rect x="460" y="163" width="120" height="20" rx="4" fill="#1a1a2e" stroke="#333" stroke-width="0.5"/>
+  <text x="520" y="177" text-anchor="middle" font-family="'Courier New', monospace" font-size="8" fill="#ff00ff">commands • chat</text>
+  
+  <!-- HTTP API Box (Bottom) -->
+  <rect x="310" y="370" width="280" height="80" rx="10" fill="#1a1a2e" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="450" y="400" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="#f59e0b">REST API + Dashboard</text>
+  <text x="450" y="420" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">/health • /messages • /events • /dashboard</text>
+  <text x="450" y="440" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">POST /send</text>
+  
+  <!-- Hub to API -->
+  <line x1="450" y1="330" x2="450" y2="370" stroke="#f59e0b" stroke-width="1" opacity="0.5" stroke-dasharray="3,3"/>
+  
+  <!-- React UI Box -->
+  <rect x="680" y="380" width="180" height="60" rx="10" fill="#1a1a2e" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="770" y="410" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="#8b5cf6">React Dashboard</text>
+  <text x="770" y="430" text-anchor="middle" font-family="'Courier New', monospace" font-size="9" fill="#666">Vite + TypeScript</text>
+  
+  <line x1="590" y1="410" x2="680" y2="410" stroke="#8b5cf6" stroke-width="1" opacity="0.5" stroke-dasharray="3,3"/>
+</svg>
